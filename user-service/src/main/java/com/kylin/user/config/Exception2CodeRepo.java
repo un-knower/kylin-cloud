@@ -1,7 +1,8 @@
 package com.kylin.user.config;
 
-import com.kylin.user.common.RestCode;
+import com.kylin.core.common.RestCode;
 import com.kylin.user.exception.IllegalParamsException;
+import com.kylin.user.exception.ParamJsonException;
 import com.kylin.user.exception.UserException;
 import com.kylin.user.exception.WithTypeException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -15,6 +16,7 @@ public class Exception2CodeRepo {
 			.put(IllegalParamsException.Type.WRONG_PAGE_NUM,RestCode.WRONG_PAGE)
             .put(IllegalStateException.class,RestCode.UNKNOWN_ERROR)
             .put(UserException.class,RestCode.UNKNOWN_ERROR)
+            .put(ParamJsonException.class,RestCode.ILLEGAL_PARAMS)
 	        .build();
 
 	private static Object getType(Throwable throwable){

@@ -11,6 +11,7 @@
     <module>user-service</module>
     <module>eureka-sever</module>
     <module>api-gateway</module>
+      <module>kylin-core</module>
   </modules>
 
   <packaging>pom</packaging>

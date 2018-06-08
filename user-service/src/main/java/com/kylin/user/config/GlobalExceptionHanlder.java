@@ -2,8 +2,8 @@ package com.kylin.user.config;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.kylin.user.common.RestCode;
-import com.kylin.user.common.RestResponse;
+import com.kylin.core.common.RestCode;
+import com.kylin.core.common.RestResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -25,8 +25,6 @@ public class GlobalExceptionHanlder {
 	@ResponseBody
 	public RestResponse<Object> handler(HttpServletRequest req, Throwable throwable){
 		LOGGER.error(throwable.getMessage(),throwable);
-//	    tracer.addTag(Span.SPAN_ERROR_TAG_NAME, ExceptionUtils.getExceptionMessage(throwable));
-//	    System.out.println(tracer.getCurrentSpan().getTraceId());
 		RestCode restCode = Exception2CodeRepo.getCode(throwable);
 		RestResponse<Object> response = new RestResponse<Object>(restCode.code,restCode.msg);
 		return response;

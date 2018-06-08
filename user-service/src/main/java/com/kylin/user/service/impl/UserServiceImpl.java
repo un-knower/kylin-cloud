@@ -3,18 +3,18 @@ package com.kylin.user.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
-import com.kylin.user.common.BeanHelper;
-import com.kylin.user.common.HashUtils;
-import com.kylin.user.common.JwtHelper;
+import com.kylin.core.common.BeanHelper;
+import com.kylin.core.util.HashUtils;
+import com.kylin.core.common.JwtHelper;
+import com.kylin.core.util.ComUtil;
 import com.kylin.user.entity.User;
 import com.kylin.user.exception.UserException;
 import com.kylin.user.mapper.UserMapper;
+import com.kylin.user.service.IMailService;
 import com.kylin.user.service.IUserService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -40,7 +40,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private StringRedisTemplate redisTemplate;
 
     @Autowired
-    private MailService mailService;
+    private IMailService mailService;
 
     @Autowired
     private UserMapper userMapper;
@@ -62,7 +62,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         String key = "user:user:"+id;
         String json =  redisTemplate.opsForValue().get(key);
         User user = null;
-        if (Strings.isNullOrEmpty(json)) {
+        if (ComUtil.isEmpty(json)) {
             user =  userMapper.selectById(id);
             user.setAvatar(imgPrefix + user.getAvatar());
             String string  = JSON.toJSONString(user);
@@ -98,7 +98,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public boolean enable(String key) {
         String email = redisTemplate.opsForValue().get(key);
-        if (StringUtils.isBlank(email)) {
+        if (ComUtil.isEmpty(email)) {
             throw new UserException(UserException.Type.USER_NOT_FOUND, "无效的key");
         }
         User updateUser = new User();
@@ -118,7 +118,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
      */
     @Override
     public User auth(String email, String passwd) {
-        if (StringUtils.isBlank(email) || StringUtils.isBlank(passwd)) {
+        if (ComUtil.isEmpty(email) || ComUtil.isEmpty(passwd)) {
             throw new UserException(UserException.Type.USER_AUTH_FAIL,"User Auth Fail");
         }
         Wrapper<User>  ew = new EntityWrapper<>();
@@ -177,7 +177,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         Wrapper<User>  ew = new EntityWrapper<>();
         ew.where("email={0}",email);
         List<User> list = userMapper.selectList(ew);
-        if (!list.isEmpty()) {
+        if (ComUtil.isEmpty(list)) {
             return list.get(0);
         }
         throw new UserException(UserException.Type.USER_NOT_FOUND,"User not found for " + email);
