@@ -10,7 +10,7 @@
   <modules>
     <module>user-service</module>
     <module>eureka-sever</module>
-      <module>api-gateway</module>
+    <module>api-gateway</module>
   </modules>
 
   <packaging>pom</packaging>

@@ -2,6 +2,7 @@ package com.kylin.user.config;
 
 import com.kylin.user.common.RestCode;
 import com.kylin.user.exception.IllegalParamsException;
+import com.kylin.user.exception.UserException;
 import com.kylin.user.exception.WithTypeException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -13,6 +14,7 @@ public class Exception2CodeRepo {
 	private static final ImmutableMap<Object, RestCode> MAP = ImmutableMap.<Object, RestCode>builder()
 			.put(IllegalParamsException.Type.WRONG_PAGE_NUM,RestCode.WRONG_PAGE)
             .put(IllegalStateException.class,RestCode.UNKNOWN_ERROR)
+            .put(UserException.class,RestCode.UNKNOWN_ERROR)
 	        .build();
 
 	private static Object getType(Throwable throwable){

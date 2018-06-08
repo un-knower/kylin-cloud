@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class RestResponse<T> {
   
-  private int    code;
+  private int code;
   private String msg;
   private T  result;
   
